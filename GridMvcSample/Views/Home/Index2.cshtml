@@ -1,0 +1,85 @@
+﻿@using GridMvc.Html
+@model IEnumerable<GridMvcSample.Controllers.Kisi>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GridMvc Sample</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Gridmvc.css" rel="stylesheet" />
+    <link href="~/Content/gridmvc.datepicker.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/gridmvc.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/gridmvc.lang.tr.js"></script>
+    <script src="~/Scripts/gridmvc.customwidgets.js"></script>
+</head>
+<body>
+    <div>
+        @Html.Grid(Model).Named("kisiler1").Columns(col =>
+        {
+            col.Add().Encoded(false).Sanitized(false).RenderValueAs(html =>
+            {
+                string htmlStr = "<a href='/Home/Edit/" + html.Id.ToString() + "' class='btn btn-warning'><span class='glyphicon glyphicon-edit'></span> Düzenle</a>";
+                return MvcHtmlString.Create(htmlStr);
+            }).SetWidth(30);
+
+            col.Add().Encoded(false).Sanitized(false).RenderValueAs(html =>
+            {
+                string htmlStr = "<a href='/Home/Delete/" + html.Id.ToString() + "' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span> Sil</a>";
+                return MvcHtmlString.Create(htmlStr);
+            }).SetWidth(30);
+        }).AutoGenerateColumns().WithPaging(5, 6, "grid1_page").SetLanguage("tr")
+    </div>
+
+    <div id="detaylar">
+
+        <span class="bolder">ID : </span><span id="kisiId"></span><br />
+        <span class="bolder">Tam Adı : </span><span id="kisiFullName"></span><br />
+        <span class="bolder">Yaş : </span><span id="kisiAge"></span><br />
+        <span class="bolder">D.Tarihi : </span><span id="kisiBirthdate"></span><br />
+        <span class="bolder">Aktif Mi? : </span><span id="kisiIsActive"></span><br />
+
+    </div>
+
+    <script>
+
+        $(function () {
+
+            pageGrids.kisiler1.onRowSelect(function (e) {
+
+                var data = e.row;
+
+                $("#kisiId").text(data.Id);
+                $("#kisiFullName").text(data.FullName);
+                $("#kisiAge").text(data.Age);
+                $("#kisiBirthdate").text(data.Birthdate);
+                $("#kisiIsActive").text(data.IsActive);
+
+            });
+
+        })
+
+    </script>
+
+    <style>
+        .bolder {
+            font-weight: bold;
+        }
+
+        #detaylar {
+            display: block;
+            margin: 10px;
+            font-size: 14pt;
+        }
+    </style>
+
+</body>
+
+
+
+</html>
